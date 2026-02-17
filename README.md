@@ -14,9 +14,9 @@
 
 Berikut adalah tampilan antarmuka **RAW FEED: Brutalist Edition**:
 
-| **Feed Berita** | **Detail Profil** | **Home Screen** |
+| **Home Screen** | **Feed Berita** | **Detail Profil** |
 | :---: | :---: | :---: |
-| ![Feed](1.JPG) | ![Profile](2.JPG) | ![Home](3.JPG) |
+| ![Home](1.JPG) | ![Feed](2.JPG) | ![Profile](3.JPG) |
 
 > *Aplikasi mendukung auto-scroll ke atas setiap kali berita baru masuk untuk memastikan Anda tidak ketinggalan informasi terbaru.*
 
