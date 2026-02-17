@@ -21,17 +21,5 @@ import myfirstkmpapp.composeapp.generated.resources.compose_multiplatform
 
 @Composable
 fun App() {
-    MaterialTheme {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text("Halo, Febrian Valentino Nugroho!")
-            Text("NIM: [123140034]")
-            Text("Running on: ${getPlatformName()}")
-            Button(onClick = { /* logic */ }) {
-                Text("Click me!")
-            }
-        }
-    }
+    NewsScreen()
 }
