@@ -21,14 +21,9 @@
 
 Berikut adalah tampilan antarmuka aplikasi:
 
-### Contact Information & Profile Overview
-![Contact Information](1.JPG)
-
-### Education & Skills
-![Education skills](2.JPG)
-
-### Edit Profile Page & Color Wheel
-![Edit profile page](3.JPG)
+| Contact Information & Profile Overview | Education & Skills | Edit Profile Page & Color Wheel |
+| :---: | :---: | :---: |
+| ![Contact Information](1.JPG) | ![Education skills](2.JPG) | ![Edit profile page](3.JPG) |
 
 ### Galeri Fitur Lainnya
 
