@@ -1,4 +1,4 @@
-# My Profile App - Pemob_4 🚀 (MVVM Edition)
+# My Profile App - Pemob_4 (MVVM Edition)
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.0.0-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org/)
 [![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.6.10-orange.svg?style=flat&logo=jetpack-compose)](https://www.jetbrains.com/lp/compose-multiplatform/)
@@ -8,9 +8,9 @@
 
 ---
 
-## What's New in Pemob_4? ✨
+## What's New in Pemob_4?
 
-*   **Professional MVVM Architecture:** Pemisahan tegas antara `ui/`, `viewmodel/`, dan `data/` (Clean Code).
+*   **Professional MVVM Architecture:** Pemisahan tegas antara `ui/`, `viewmodel/`, and `data/` (Clean Code).
 *   **Dark Monochrome Mode:** Pencahayaan gelap dengan estetika monokrom (grayscale) yang elegan untuk tampilan premium.
 *   **Refined Edit Interface:** Form pengeditan yang lebih rapi untuk Nama, Jabatan, dan Bio dengan transisi animasi yang mulus.
 *   **StateFlow Management:** Sinkronisasi data yang lebih stabil dan reaktif menggunakan Kotlin Coroutines.
@@ -18,11 +18,11 @@
 
 ---
 
-## 📸 Gallery & Comparison (Pemob_3 vs Pemob_4)
+## Screenshot & Comparison (Pemob_3 vs Pemob_4)
 
 Berikut adalah perbandingan evolusi aplikasi dari versi **Pemob_3** menuju **Pemob_4**:
 
-### 🆕 Versi Terbaru (Pemob_4)
+### Versi Terbaru (Pemob_4)
 | Profile View (Main) | Edit Mode (Form) | Dark Monochrome Mode |
 | :---: | :---: | :---: |
 | ![Profile View](Profile%20View.JPG) | ![Edit form Terbaru](Edit%20form_Tebaru.JPG) | ![Dark Mode Terbaru](Edit%20Form_Dark%20Terbaru.JPG) |
@@ -31,7 +31,7 @@ Berikut adalah perbandingan evolusi aplikasi dari versi **Pemob_3** menuju **Pem
 | :---: | :---: |
 | ![Edit Bio](Edit%20Form_bio.JPG) | ![Save Profile](EDIT_FORM%20SAVE%20pROFILE.JPG) |
 
-### 🕰️ Versi Sebelumnya (Pemob_3 Overview)
+### Versi Sebelumnya (Pemob_3 Overview)
 Untuk mengenang perjalanan pengembangan, berikut adalah snapshot dari **Pemob_3**:
 | Phase 3 - Part 1 | Phase 3 - Part 2 | Phase 3 - Part 3 |
 | :---: | :---: | :---: |
@@ -40,7 +40,7 @@ Untuk mengenang perjalanan pengembangan, berikut adalah snapshot dari **Pemob_3*
 
 ---
 
-## 🛠️ Struktur Project (MVVM)
+## Struktur Project (MVVM)
 
 Aplikasi telah diatur ulang ke dalam struktur paket yang modular:
 
@@ -59,7 +59,7 @@ Aplikasi telah diatur ulang ke dalam struktur paket yang modular:
 
 ---
 
-## 🚀 Instalasi & Run
+## Instalasi & Run
 
 1. **Clone Repository Terbaru:**
    ```bash
