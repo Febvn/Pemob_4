@@ -1,4 +1,5 @@
-package com.example.myfirstkmpapp.model
+package com.example.myfirstkmpapp.data
+
 
 /**
  * ProfileData — Data class untuk menyimpan informasi profil pengguna.

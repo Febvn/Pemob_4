@@ -6,6 +6,8 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.BorderStroke
@@ -45,7 +47,7 @@ import com.example.myfirstkmpapp.ui.theme.SkeuPalette
 import com.example.myfirstkmpapp.ui.theme.SkeuPalettes
 import kotlinx.coroutines.delay
 import androidx.compose.ui.graphics.ImageBitmap
-import com.example.myfirstkmpapp.model.ProfileData
+import com.example.myfirstkmpapp.data.ProfileData
 import com.example.myfirstkmpapp.ui.components.ColorWheel
 import com.example.myfirstkmpapp.util.pickImageFile
 import com.example.myfirstkmpapp.util.toImageBitmap
@@ -59,15 +61,14 @@ import com.example.myfirstkmpapp.util.toImageBitmap
  */
 @Composable
 fun ProfileScreen(
-    profileData: ProfileData,
-    onProfileDataChange: (ProfileData) -> Unit,
-    onPaletteChange: (SkeuPalette) -> Unit
+    viewModel: com.example.myfirstkmpapp.viewmodel.ProfileViewModel = androidx.lifecycle.viewmodel.compose.viewModel { com.example.myfirstkmpapp.viewmodel.ProfileViewModel() }
 ) {
+    val uiState by viewModel.uiState.collectAsState()
     val palette = LocalSkeuPalette.current
 
-    // State untuk mode edit
+    // State untuk mode edit (local UI state)
     var isEditMode by remember { mutableStateOf(false) }
-    var tempData by remember { mutableStateOf(profileData) }
+    var tempData by remember { mutableStateOf(uiState.profileData) }
 
     // State untuk bitmap yang di-decode
     val profileBitmap = remember(tempData.profileImage) {
@@ -75,9 +76,9 @@ fun ProfileScreen(
     }
 
     // Update tempData if profileData changes externally (unlikely but good practice)
-    LaunchedEffect(profileData) {
+    LaunchedEffect(uiState.profileData) {
         if (!isEditMode) {
-            tempData = profileData
+            tempData = uiState.profileData
         }
     }
 
@@ -120,34 +121,9 @@ fun ProfileScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         // ==========================================
-        // SECTION 0: Dynamic Theme Selector (Show only in Edit Mode)
-        // ==========================================
-        if (isEditMode) {
-            ProfileCard(title = "Custom Theme Color", elevation = 6.dp) {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "Pick a base color to generate your theme:",
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    ColorWheel(
-                        modifier = Modifier.size(150.dp),
-                        onColorChanged = { baseColor ->
-                            onPaletteChange(com.example.myfirstkmpapp.ui.theme.generateSkeuPalette(baseColor))
-                        }
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(24.dp))
-        }
-
-        // ==========================================
         // SECTION 1: Profile Header
         // ==========================================
+
         AnimatedVisibility(
             visible = showHeader,
             enter = fadeIn(animationSpec = tween(600)) +
@@ -186,11 +162,70 @@ fun ProfileScreen(
                         onValueChange = { tempData = tempData.copy(title = it) },
                         label = "Job Title"
                     )
+                // Dark Mode Toggle Switch (Eksklusif di Edit Mode)
+                AnimatedVisibility(
+                    visible = isEditMode,
+                    enter = fadeIn() + expandVertically(),
+                    exit = fadeOut() + shrinkVertically()
+                ) {
+                    Column {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "DARK MODE",
+                                style = MaterialTheme.typography.labelLarge.copy(
+                                    fontSize = 11.sp,
+                                    color = palette.onSurfaceLight,
+                                    letterSpacing = 1.sp
+                                )
+                            )
+                            androidx.compose.material3.Switch(
+                                checked = uiState.isDarkTheme,
+                                onCheckedChange = { viewModel.toggleTheme(it) },
+                                colors = androidx.compose.material3.SwitchDefaults.colors(
+                                    checkedThumbColor = palette.primary,
+                                    checkedTrackColor = palette.primary.copy(alpha = 0.4f),
+                                    uncheckedThumbColor = palette.onSurfaceLight.copy(alpha = 0.5f),
+                                    uncheckedTrackColor = palette.surfaceVariant
+                                )
+                            )
+                        }
+                        
+                        // Color Wheel — Muncul kembali untuk ganti warna dasar
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Text(
+                            text = "THEME COLOR",
+                            style = MaterialTheme.typography.labelLarge.copy(
+                                fontSize = 11.sp,
+                                color = palette.onSurfaceLight,
+                                letterSpacing = 1.sp
+                            ),
+                            modifier = Modifier.padding(horizontal = 12.dp)
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                            com.example.myfirstkmpapp.ui.components.ColorWheel(
+                                modifier = Modifier.size(160.dp),
+                                onColorChanged = { baseColor ->
+                                    viewModel.updatePalette(com.example.myfirstkmpapp.ui.theme.generateSkeuPalette(baseColor, uiState.isDarkTheme))
+                                }
+                            )
+                        }
+                    }
                 }
+
             }
         }
+    }
 
-        Spacer(modifier = Modifier.height(24.dp))
+    Spacer(modifier = Modifier.height(24.dp))
+
+
+
 
         // ==========================================
         // SECTION 2: Bio Card
@@ -348,7 +383,7 @@ fun ProfileScreen(
                 Button(
                     onClick = {
                         if (isEditMode) {
-                            onProfileDataChange(tempData)
+                            viewModel.onSaveProfile(tempData)
                         }
                         isEditMode = !isEditMode
                     },

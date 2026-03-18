@@ -1,91 +1,75 @@
-# My Profile App: Skeuomorphic Design
+# My Profile App - Pemob_4 🚀 (MVVM Edition)
 
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.9.20-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org/)
-[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.5.10-orange.svg?style=flat&logo=jetpack-compose)](https://www.jetbrains.com/lp/compose-multiplatform/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.0.0-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org/)
+[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.6.10-orange.svg?style=flat&logo=jetpack-compose)](https://www.jetbrains.com/lp/compose-multiplatform/)
+[![Architecture](https://img.shields.io/badge/Architecture-MVVM-brightgreen.svg?style=flat)](https://developer.android.com/topic/architecture)
 
-**My Profile App** adalah aplikasi profil interaktif berbasis **Kotlin Multiplatform (KMP)** dan **Compose Multiplatform** yang menampilkan desain antarmuka **Skeuomorphic**. Aplikasi ini memungkinkan pengguna untuk melihat profil dengan gaya visual yang kaya (bertekstur, bayangan mendalam, gradiasi) serta dapat diedit dan dikustomisasi warnanya secara dinamis.
-
----
-
-## Fitur Utama
-
-- **Skeuomorphic UI:** Antarmuka dengan elemen visual realistis, bayangan inset/outset, dan tekstur border yang menyerupai jahitan kulit (leather stitching).
-- **Interactive Edit Mode:** Pengguna dapat mengubah data profil (Nama, Title, Bio, Kontak, Pendidikan, Keahlian) secara langsung di dalam aplikasi.
-- **Dynamic Color Theme:** Dilengkapi dengan *Color Wheel* yang memungkinkan pengguna meracik tema warna (SkeuPalette) secara custom menggunakan algoritma HSL.
-- **Profile Picture Upload:** Memungkinkan pengguna untuk mengunggah dan menghapus foto profil kustom khusus di platform Desktop/JVM.
+**My Profile App - Pemob_4** adalah evolusi besar dari versi sebelumnya. Aplikasi profil berbasis **Kotlin Multiplatform (KMP)** ini sekarang telah mengadopsi arsitektur **MVVM (Model-View-ViewModel)** yang matang, fitur **Dark Monochrome Mode**, dan sistem pengeditan profil yang jauh lebih reaktif menggunakan **StateFlow**.
 
 ---
 
-## Screenshot & Demo
+## What's New in Pemob_4? ✨
 
-Berikut adalah tampilan antarmuka aplikasi:
+*   **Professional MVVM Architecture:** Pemisahan tegas antara `ui/`, `viewmodel/`, dan `data/` (Clean Code).
+*   **Dark Monochrome Mode:** Pencahayaan gelap dengan estetika monokrom (grayscale) yang elegan untuk tampilan premium.
+*   **Refined Edit Interface:** Form pengeditan yang lebih rapi untuk Nama, Jabatan, dan Bio dengan transisi animasi yang mulus.
+*   **StateFlow Management:** Sinkronisasi data yang lebih stabil dan reaktif menggunakan Kotlin Coroutines.
+*   **Memory Optimized:** Konfigurasi Gradle yang telah dioptimalkan (768MB heap) untuk performa lebih ringan di perangkat dengan RAM terbatas.
 
-| Contact Information & Profile Overview | Education & Skills | Edit Profile Page & Color Wheel |
+---
+
+## 📸 Gallery & Comparison (Pemob_3 vs Pemob_4)
+
+Berikut adalah perbandingan evolusi aplikasi dari versi **Pemob_3** menuju **Pemob_4**:
+
+### 🆕 Versi Terbaru (Pemob_4)
+| Profile View (Main) | Edit Mode (Form) | Dark Monochrome Mode |
 | :---: | :---: | :---: |
-| ![Contact Information](1.JPG) | ![Education skills](2.JPG) | ![Edit profile page](3.JPG) |
+| ![Profile View](Profile%20View.JPG) | ![Edit form Terbaru](Edit%20form_Tebaru.JPG) | ![Dark Mode Terbaru](Edit%20Form_Dark%20Terbaru.JPG) |
 
-### Galeri Fitur Lainnya
+| Edit Bio Field | Saving Profile Progress |
+| :---: | :---: |
+| ![Edit Bio](Edit%20Form_bio.JPG) | ![Save Profile](EDIT_FORM%20SAVE%20pROFILE.JPG) |
 
-| Tampilan 1 | Tampilan 2 | Tampilan 3 |
+### 🕰️ Versi Sebelumnya (Pemob_3 Overview)
+Untuk mengenang perjalanan pengembangan, berikut adalah snapshot dari **Pemob_3**:
+| Phase 3 - Part 1 | Phase 3 - Part 2 | Phase 3 - Part 3 |
 | :---: | :---: | :---: |
-| ![Screenshot 4](4.JPG) | ![Screenshot 5](5.JPG) | ![Screenshot 7](7.JPG) |
-
-> *Aplikasi ini menggunakan ikon-ikon Lucid/Outlined bawaan Material 3 dan mendemonstrasikan kapabilitas styling tingkat lanjut dari Jetpack Compose.*
-
----
-
-## Tech Stack
-
-Komponen dan teknologi utama yang digunakan:
-*   **Core:** [Kotlin Multiplatform (KMP)](https://kotlinlang.org/docs/multiplatform.html)
-*   **UI Framework:** Compose Multiplatform
-*   **Graphics & Drawing:** Canvas, SweepGradient, ImageBitmap (Skia)
-*   **State Management:** Jetpack Compose `MutableState`, `remember`
-*   **Build Tool:** Gradle (Kotlin DSL)
+| ![1](1.JPG) | ![2](2.JPG) | ![3](3.JPG) |
+| ![4](4.JPG) | ![5](5.JPG) | ![7](7.JPG) |
 
 ---
 
-## Struktur Project
+## 🛠️ Struktur Project (MVVM)
+
+Aplikasi telah diatur ulang ke dalam struktur paket yang modular:
 
 ```text
 ├── composeApp/
-│   ├── src/
-│   │   ├── commonMain/
-│   │   │   ├── kotlin/com/example/myfirstkmpapp/
-│   │   │   │   ├── model/         # Data class ProfileData
-│   │   │   │   ├── ui/
-│   │   │   │   │   ├── components/ # ColorWheel, ProfileCard, InfoItem, dll
-│   │   │   │   │   ├── screen/     # ProfileScreen (UI Utama)
-│   │   │   │   │   └── theme/      # SkeuomorphicTheme & Palette Generator
-│   │   │   │   └── util/          # Utilitas ImagePicker
-│   │   │   └── App.kt             # Root / Main App
-│   │   └── jvmMain/               # Implementasi ImagePicker Desktop (AWT)
-│   └── build.gradle.kts
-├── gradle/
-└── gradlew.bat
+│   ├── src/commonMain/kotlin/com/example/myfirstkmpapp/
+│   │   ├── data/           # Model data murni (ProfileData)
+│   │   ├── viewmodel/      # Otak aplikasi (ViewModel & UI State)
+│   │   ├── ui/             # Lapisan Tampilan
+│   │   │   ├── components/ # Skeuorphic Cards, ColorWheel, dll
+│   │   │   ├── screen/     # ProfileScreen (UI Utama)
+│   │   │   └── theme/      # Palette Generator & Themes
+│   │   ├── util/           # Image Pickers & Decoders
+│   │   └── App.kt          # Root Entry Point
 ```
 
 ---
 
-## Instalasi & Penggunaan
+## 🚀 Instalasi & Run
 
-### Prasyarat
-- **JDK 11** atau lebih baru.
-- **Android Studio** atau **IntelliJ IDEA**.
-
-### Langkah-langkah Menjalankan
-1. Clone repository:
+1. **Clone Repository Terbaru:**
    ```bash
-   git clone https://github.com/Febvn/Pemob_3.git
+   git clone https://github.com/Febvn/Pemob_4.git
    ```
-2. Masuk ke direktori project:
-   ```bash
-   cd Pemob_3
-   ```
-3. Jalankan aplikasi (Desktop / JVM target):
-   ```bash
-   ./gradlew :composeApp:run
+2. **Setup JAVA_HOME (PENTING):**
+   Pastikan Anda menggunakan JDK 17+ (Rekomendasi: JBR dari Android Studio).
+3. **Jalankan Aplikasi:**
+   ```powershell
+   ./gradlew :composeApp:run --no-daemon
    ```
 
 ---
@@ -94,6 +78,7 @@ Komponen dan teknologi utama yang digunakan:
 
 **Febrian Valentino Nugroho**
 *   **GitHub:** [@Febvn](https://github.com/Febvn)
+*   **Class:** Pemob (Pemrograman Mobile)
 
 ---
 

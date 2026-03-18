@@ -38,13 +38,11 @@ data class SkeuPalette(
 
 /**
  * Dynamic Palette Generator
- * Menghasilkan palet skeuomorphic lengkap dari satu warna dasar.
+ * Menghasil palet skeuomorphic lengkap dari satu warna dasar.
  */
-fun generateSkeuPalette(baseColor: Color): SkeuPalette {
+fun generateSkeuPalette(baseColor: Color, isDark: Boolean = false): SkeuPalette {
     val hsv = FloatArray(3)
     
-    // Konversi manual sederhana atau menggunakan ekstensi jika tersedia
-    // Untuk platform multiplatform, kita bisa menggunakan pendekatan HSL manual
     val r = baseColor.red
     val g = baseColor.green
     val b = baseColor.blue
@@ -53,14 +51,14 @@ fun generateSkeuPalette(baseColor: Color): SkeuPalette {
     val min = minOf(r, minOf(g, b))
     var h: Float
     var s: Float
-    val l = (max + min) / 2f
+    val l_orig = (max + min) / 2f
 
     if (max == min) {
         h = 0f
         s = 0f
     } else {
         val d = max - min
-        s = if (l > 0.5f) d / (2f - max - min) else d / (max + min)
+        s = if (l_orig > 0.5f) d / (2f - max - min) else d / (max + min)
         h = when (max) {
             r -> (g - b) / d + (if (g < b) 6f else 0f)
             g -> (b - r) / d + 2f
@@ -90,16 +88,20 @@ fun generateSkeuPalette(baseColor: Color): SkeuPalette {
         )
     }
 
-    // Generate colors based on the Hue
-    val bg = fromHsl(h, s.coerceAtMost(0.3f), 0.9f) // Very light/muted
-    val surf = fromHsl(h, s.coerceAtMost(0.2f), 0.95f)
-    val surfVar = fromHsl(h, s.coerceAtMost(0.25f), 0.85f)
+    // Adjustment for Dark Mode
+    // If isDark is true, we force saturation to 0 for a "MONOCHROME" look
+    val s_final = if (isDark) 0.05f else s
+    val l_final = if (isDark) l_orig.coerceAtMost(0.2f) else l_orig
+
+    // Generate colors based on the Hue (or Grayscale if isDark)
+    val bg = if (isDark) fromHsl(h, 0f, 0.08f) else fromHsl(h, s.coerceAtMost(0.3f), 0.9f)
+    val surf = if (isDark) fromHsl(h, 0f, 0.12f) else fromHsl(h, s.coerceAtMost(0.2f), 0.95f)
+    val surfVar = if (isDark) fromHsl(h, 0f, 0.05f) else fromHsl(h, s.coerceAtMost(0.25f), 0.85f)
     
-    val primary = fromHsl(h, s.coerceAtLeast(0.5f), 0.4f)
-    val primaryVar = fromHsl(h, s.coerceAtLeast(0.6f), 0.3f)
+    val primary = if (isDark) Color(0xFFE0E0E0) else fromHsl(h, s.coerceAtLeast(0.5f), 0.4f)
+    val primaryVar = if (isDark) Color(0xFFA0A0A0) else fromHsl(h, s.coerceAtLeast(0.6f), 0.3f)
     
-    val secondary = fromHsl(h, s.coerceAtMost(0.4f), 0.6f)
-    val secondaryVar = fromHsl(h, s.coerceAtMost(0.4f), 0.7f)
+    val secondary = if (isDark) Color(0xFF757575) else fromHsl(h, s.coerceAtMost(0.4f), 0.6f)
 
     return SkeuPalette(
         background = bg,
@@ -108,17 +110,17 @@ fun generateSkeuPalette(baseColor: Color): SkeuPalette {
         primary = primary,
         primaryVariant = primaryVar,
         secondary = secondary,
-        secondaryVariant = secondaryVar,
-        onBackground = fromHsl(h, s.coerceAtMost(0.2f), 0.15f),
-        onSurface = fromHsl(h, s.coerceAtMost(0.2f), 0.25f),
-        onSurfaceLight = fromHsl(h, s.coerceAtMost(0.15f), 0.5f),
-        onPrimary = Color.White,
-        shadowDark = Color(0, 0, 0, 60), // Semi-transparent black
-        shadowLight = Color(255, 255, 255, 180), // Semi-transparent white
-        stitching = fromHsl(h, s.coerceAtMost(0.3f), 0.7f),
+        secondaryVariant = if (isDark) Color(0xFF424242) else fromHsl(h, s.coerceAtMost(0.4f), 0.7f),
+        onBackground = if (isDark) Color.White.copy(alpha = 0.95f) else fromHsl(h, s.coerceAtMost(0.2f), 0.15f),
+        onSurface = if (isDark) Color.White.copy(alpha = 0.9f) else fromHsl(h, s.coerceAtMost(0.2f), 0.25f),
+        onSurfaceLight = if (isDark) Color.White.copy(alpha = 0.6f) else fromHsl(h, s.coerceAtMost(0.15f), 0.5f),
+        onPrimary = Color.Black,
+        shadowDark = if (isDark) Color(0, 0, 0, 180) else Color(0, 0, 0, 60),
+        shadowLight = if (isDark) Color(255, 255, 255, 40) else Color(255, 255, 255, 180),
+        stitching = if (isDark) fromHsl(h, s.coerceAtMost(0.3f), 0.3f) else fromHsl(h, s.coerceAtMost(0.3f), 0.7f),
         success = Color(0xFF43A047),
         error = Color(0xFFE53935),
-        info = fromHsl((h + 0.5f) % 1f, 0.4f, 0.5f), // Complementary
+        info = fromHsl((h + 0.5f) % 1f, 0.4f, 0.5f),
         iconTint = primary
     )
 }
@@ -143,20 +145,36 @@ object SkeuPalettes {
 @Composable
 fun SkeuomorphicTheme(
     palette: SkeuPalette = SkeuPalettes.Leather,
+    isDark: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = lightColorScheme(
-        primary = palette.primary,
-        onPrimary = palette.onPrimary,
-        secondary = palette.secondary,
-        onSecondary = palette.onPrimary,
-        background = palette.background,
-        onBackground = palette.onBackground,
-        surface = palette.surface,
-        onSurface = palette.onSurface,
-        surfaceVariant = palette.surfaceVariant,
-        error = palette.error,
-    )
+    val colorScheme = if (isDark) {
+        darkColorScheme(
+            primary = palette.primary,
+            onPrimary = palette.onPrimary,
+            secondary = palette.secondary,
+            onSecondary = palette.onPrimary,
+            background = palette.background,
+            onBackground = palette.onBackground,
+            surface = palette.surface,
+            onSurface = palette.onSurface,
+            surfaceVariant = palette.surfaceVariant,
+            error = palette.error,
+        )
+    } else {
+        lightColorScheme(
+            primary = palette.primary,
+            onPrimary = palette.onPrimary,
+            secondary = palette.secondary,
+            onSecondary = palette.onPrimary,
+            background = palette.background,
+            onBackground = palette.onBackground,
+            surface = palette.surface,
+            onSurface = palette.onSurface,
+            surfaceVariant = palette.surfaceVariant,
+            error = palette.error,
+        )
+    }
 
     CompositionLocalProvider(LocalSkeuPalette provides palette) {
         MaterialTheme(

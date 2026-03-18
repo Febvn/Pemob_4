@@ -3,9 +3,9 @@ package com.example.myfirstkmpapp
 import androidx.compose.runtime.*
 import com.example.myfirstkmpapp.ui.screen.ProfileScreen
 import com.example.myfirstkmpapp.ui.theme.SkeuomorphicTheme
-import com.example.myfirstkmpapp.ui.theme.SkeuPalettes
-
-import com.example.myfirstkmpapp.model.ProfileData
+import com.example.myfirstkmpapp.viewmodel.ProfileViewModel
+import com.example.myfirstkmpapp.viewmodel.ProfileUiState
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 /**
  * App — Entry point utama aplikasi
@@ -14,14 +14,13 @@ import com.example.myfirstkmpapp.model.ProfileData
  */
 @Composable
 fun App() {
-    var currentPalette by remember { mutableStateOf(SkeuPalettes.Leather) }
-    var profileData by remember { mutableStateOf(ProfileData()) }
+    val viewModel: ProfileViewModel = viewModel { ProfileViewModel() }
+    val uiState by viewModel.uiState.collectAsState()
 
-    SkeuomorphicTheme(palette = currentPalette) {
-        ProfileScreen(
-            profileData = profileData,
-            onProfileDataChange = { profileData = it },
-            onPaletteChange = { currentPalette = it }
-        )
+    SkeuomorphicTheme(
+        palette = uiState.currentPalette,
+        isDark = uiState.isDarkTheme
+    ) {
+        ProfileScreen(viewModel = viewModel)
     }
 }
