@@ -19,9 +19,7 @@
 
 ## Video Demo Navigasi (WEEK_5)
 
-<div align="center">
-  <video src="Video%20DEMO%2030s%20navigation%20flow.mp4" width="100%" controls autoplay loop muted></video>
-</div>
+![Navigation Demo](Video%20DEMO%2030s%20navigation%20flow.mp4)
 
 ---
 
