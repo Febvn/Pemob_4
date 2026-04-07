@@ -16,6 +16,10 @@
 *   **Real-time State Management:** sinkronisasi data yang reaktif menggunakan StateFlow untuk pengalaman pengguna yang mulus.
 *   **Optimized Performance:** Fokus pada manajemen teks dan kecepatan build yang maksimal.
 
+## Video Demo Navigasi (WEEK_5)
+
+<video src="Video%20DEMO%2030s%20navigation%20flow.mp4" width="100%" controls autoplay loop></video>
+
 ---
 
 ## Screenshot & Comparison (Pemob_3 vs Pemob_4)
